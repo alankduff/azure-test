@@ -24,7 +24,6 @@ resource "azurerm_subnet" "openwebui" {
   virtual_network_name = azurerm_virtual_network.openwebui.name
 #  address_prefixes     = [cidrsubnet(azurerm_virtual_network.openwebui.address_space[0],8,2)]  This is from the video, but doesn't work with my version of Terraform.
   address_prefixes      = [cidrsubnet(one(azurerm_virtual_network.openwebui.address_space), 8, 2)]
-
 }
 
 resource "azurerm_public_ip" "openwebui" {
@@ -53,9 +52,7 @@ resource "azurerm_linux_virtual_machine" "openwebui" {
   location            = azurerm_resource_group.openwebui.location
   size                = "Standard_A2_v2"
   admin_username      = "openwebui"
-  network_interface_ids = [
-    azurerm_network_interface.openwebui.id,
-  ]
+  network_interface_ids = [azurerm_network_interface.openwebui.id,]
 
   admin_ssh_key {
     username   = "openwebui"
@@ -73,6 +70,8 @@ resource "azurerm_linux_virtual_machine" "openwebui" {
     sku       = data.azurerm_platform_image.openwebui.sku
     version   = data.azurerm_platform_image.openwebui.version
   }
+
+}
 
 resource "azurerm_network_security_group" "openwebui" {
   name                = "ssh-to-openwebui"
@@ -95,6 +94,4 @@ resource "azurerm_network_security_group" "openwebui" {
 resource "azurerm_subnet_security_group_association" "example" {
   subnet_id                 = azurerm_subnet.openwebui.id
   network_security_group_id = azurerm_network_security_group.openwebui.id
-}
-
 }
