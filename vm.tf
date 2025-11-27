@@ -91,7 +91,7 @@ resource "azurerm_network_security_group" "openwebui" {
   }
 }
 
-resource "azurerm_subnet_security_group_association" "example" {
+resource "azurerm_subnet_network_security_group_association" "openwebui" {
   subnet_id                 = azurerm_subnet.openwebui.id
   network_security_group_id = azurerm_network_security_group.openwebui.id
 }
