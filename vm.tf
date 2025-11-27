@@ -22,7 +22,7 @@ resource "azurerm_subnet" "openwebui" {
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.openwebui.name
   virtual_network_name = azurerm_virtual_network.openwebui.name
-  address_prefixes     = [cidrsubnet(azurerm_virtual_network.openwebui.address_space[0],8,1)]
+  address_prefixes     = [cidrsubnet(azurerm_virtual_network.openwebui.address_space[0],8,2)]
 }
 
 resource "azurerm_public_ip" "openwebui" {
