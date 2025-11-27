@@ -23,10 +23,7 @@ resource "azurerm_subnet" "openwebui" {
   resource_group_name  = azurerm_resource_group.openwebui.name
   virtual_network_name = azurerm_virtual_network.openwebui.name
 #  address_prefixes     = [cidrsubnet(azurerm_virtual_network.openwebui.address_space[0],8,2)]
-  address_prefixes      = [cidrsubnet(one(azurerm_virtual_network.openwebui.address_space), 8, 2)
-]
-
-]
+  address_prefixes      = [cidrsubnet(one(azurerm_virtual_network.openwebui.address_space), 8, 2)]
 
 }
 
