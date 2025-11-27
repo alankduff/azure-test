@@ -73,4 +73,28 @@ resource "azurerm_linux_virtual_machine" "openwebui" {
     sku       = data.azurerm_platform_image.openwebui.sku
     version   = data.azurerm_platform_image.openwebui.version
   }
+
+resource "azurerm_network_security_group" "openwebui" {
+  name                = "ssh-to-openwebui"
+  location            = azurerm_resource_group.openwebui.location
+  resource_group_name = azurerm_resource_group.openwebui.name
+
+  security_rule {
+    name                       = "ssh-to-openwebui-rule"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
+resource "azurerm_subnet_security_group_association" "example" {
+  subnet_id                 = azurerm_subnet.openwebui.id
+  network_security_group_id = azurerm_network_security_group.openwebui.id
+}
+
 }
