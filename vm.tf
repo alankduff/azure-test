@@ -97,7 +97,7 @@ resource "terracurl_request" "openwebui" {
   method = "GET"
 
   response_codes = [200]
-  max_retry.     = 120
+  max_retry      = 120
   retry_interval = 10
 }
 
