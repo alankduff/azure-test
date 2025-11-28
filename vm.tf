@@ -5,6 +5,22 @@ data "azurerm_platform_image" "openwebui" {
   sku       = "11"
 }
 
+data "cloudinit_config" "config" {
+  gzip          = true
+  base64_encode = true
+
+  part{
+    filename     = "init.sh"
+    content_type = "text/x-shellscript"
+
+    content      = file("${path.module}/scripts/provision_basic.sh")
+  }
+
+  part{
+    content_type = "text/cloud-config"
+    content      = ile("${path.module}/scripts/init.yaml")
+  }
+}
 
 resource "azurerm_resource_group" "openwebui" {
   name     = "example-resources"
