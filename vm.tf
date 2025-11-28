@@ -5,6 +5,11 @@ data "azurerm_platform_image" "openwebui" {
   sku       = "11"
 }
 
+resource "random_password" "password" {
+  length  = 16
+  special = false
+}
+
 data "cloudinit_config" "config" {
   gzip          = true
   base64_encode = true
@@ -13,7 +18,14 @@ data "cloudinit_config" "config" {
     filename     = "init.sh"
     content_type = "text/x-shellscript"
 
-    content      = file("${path.module}/scripts/provision_basic.sh")
+    #content      = file("${path.module}/scripts/provision_basic.sh")
+    content.     = templatefile("${path.module}/scripts/provision_vars.sh",
+    {
+      open_webui_user     = var.open_webui_user,
+      open_webui_password = random_password.password.result,
+      openai_base         = var.openai_base,
+      openai_key          = var.openai_key
+    })
   }
 
   part{
