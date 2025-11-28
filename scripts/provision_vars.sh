@@ -64,10 +64,16 @@ sqlite3 /etc/open-webui.d/webui.db < /etc/open-webui.d/webui.sql
 # Cleanup
 rm -f /etc/open-webui.d/webui.sql
 
-%{ if openai_key != "" }
-echo "OPENAI_KEY='-e OPENAI_API_KEY=${openai_key}'" >> /etc/open-webui.d/openwebui.env
-echo "OPENAI_BASE='-e OPENAI_API_BASE_URLS=${openai_base}'" >> /etc/open-webui.d/openwebui.env
-%{ endif }
+#%{ if openai_key != "" }
+#echo "OPENAI_KEY='-e OPENAI_API_KEY=${openai_key}'" >> /etc/open-webui.d/openwebui.env
+#echo "OPENAI_BASE='-e OPENAI_API_BASE_URLS=${openai_base}'" >> /etc/open-webui.d/openwebui.env
+#%{ endif }
+
+cat <<EOF > /etc/open-webui.d/openwebui.env
+OPENAI_KEY="-e OPENAI_API_KEY=${openai_key}"
+OPENAI_BASE="-e OPENAI_API_BASE_URLS=${openai_base}"
+EOF
+
 
 ## Create the systemd unit
 ## When starting systemd will load the environment file and pass the variables to the container
