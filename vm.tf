@@ -18,7 +18,7 @@ data "cloudinit_config" "config" {
 
   part{
     content_type = "text/cloud-config"
-    content      = ile("${path.module}/scripts/init.yaml")
+    content      = file("${path.module}/scripts/init.yaml")
   }
 }
 
