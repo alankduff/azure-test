@@ -82,9 +82,16 @@ TimeoutStartSec=0
 Type=simple
 Restart=always
 EnvironmentFile=/etc/open-webui.d/openwebui.env
-ExecStartPre=-/usr/bin/docker stop %n
-ExecStartPre=-/usr/bin/docker rm %n
-ExecStart=/usr/bin/docker run -p 80:8080 $OPENAI_KEY $OPENAI_BASE -e RAG_EMBEDDING_MODEL_AUTO_UPDATE=true -v /etc/open-webui.d:/root/.open_web_ui -v /etc/open-webui.d:/app/backend/data --name %n ghcr.io/open-webui/open-webui:ollama
+
+ExecStartPre=-/usr/bin/docker stop openwebui
+ExecStartPre=-/usr/bin/docker rm openwebui
+ExecStart=/usr/bin/docker run -p 80:8080 $OPENAI_KEY $OPENAI_BASE \
+    -e RAG_EMBEDDING_MODEL_AUTO_UPDATE=true \
+    -v /etc/open-webui.d:/root/.open_web_ui \
+    -v /etc/open-webui.d:/app/backend/data \
+    --name openwebui \
+    ghcr.io/open-webui/open-webui:ollama
+
 
 [Install]
 WantedBy=multi-user.target
