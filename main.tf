@@ -8,6 +8,10 @@ terraform {
       source = "hashicorp/cloudinit"
       version = "2.3.7"
     }
+    terracurl = {
+      source = "devops-rob/terracurl"
+      version = "2.1.0"
+    }
   }
 }
 

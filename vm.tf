@@ -87,6 +87,18 @@ resource "azurerm_linux_virtual_machine" "openwebui" {
     version   = data.azurerm_platform_image.openwebui.version
   }
 
+  custom_data = data.cloudinit_config.config.rendered
+
+}
+
+resource "terracurl_request" "openwebui" {
+  name   = "open_web_ui"
+  url    = "http://${resource.azurerm_public_ip.openwebui.ip_address}
+  method = "GET"
+
+  response_codes = [200]
+  max_retry.     = [120]
+  retry_interval = 10
 }
 
 resource "azurerm_network_security_group" "openwebui" {
