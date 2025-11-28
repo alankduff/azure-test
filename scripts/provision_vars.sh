@@ -37,7 +37,7 @@ mkdir -p /etc/open-webui.d/
 ## At present the only way to do this is to create the database with an admin account already created.
 
 PASSWD=$(htpasswd -bnBC 10 "" "${open_webui_password}" | tr -d ':\n')
-USER="${open_webui__user}"
+USER="${open_webui_user}"
 
 # Start Open Web UI for the first time so that it creates the database
 sudo /usr/bin/docker pull ghcr.io/open-webui/open-webui:ollama
