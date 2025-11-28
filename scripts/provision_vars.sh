@@ -44,7 +44,7 @@ sudo /usr/bin/docker pull ghcr.io/open-webui/open-webui:ollama
 sudo /usr/bin/docker run -d -p 80:8080 -v /etc/open-webui.d:/root/.open_web_ui -v /etc/open-webui.d:/app/backend/data --name openwebui ghcr.io/open-webui/open-webui:ollama
 
 # Wait for the server to start
-timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%%{http_code}'' localhost)" != "200" ]]; do sleep 5; done' || false
+timeout 600 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%%{http_code}'' localhost)" != "200" ]]; do sleep 5; done' || false
 
 # Stop the server
 sudo /usr/bin/docker stop openwebui
