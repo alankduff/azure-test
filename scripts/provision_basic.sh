@@ -40,15 +40,15 @@ PASSWD=$(htpasswd -bnBC 10 "" "mypassword" | tr -d ':\n')
 USER="admin@demo.gs"
 
 # Start Open Web UI for the first time so that it creates the database
-/usr/bin/docker pull ghcr.io/open-webui/open-webui:ollama
-/usr/bin/docker run -d -p 80:8080 -v /etc/open-webui.d:/root/.open_web_ui -v /etc/open-webui.d:/app/backend/data --name openwebui ghcr.io/open-webui/open-webui:ollama
+sudo /usr/bin/docker pull ghcr.io/open-webui/open-webui:ollama
+sudo /usr/bin/docker run -d -p 80:8080 -v /etc/open-webui.d:/root/.open_web_ui -v /etc/open-webui.d:/app/backend/data --name openwebui ghcr.io/open-webui/open-webui:ollama
 
 # Wait for the server to start
 timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost)" != "200" ]]; do sleep 5; done' || false
 
 # Stop the server
-/usr/bin/docker stop openwebui
-/usr/bin/docker rm openwebui
+sudo /usr/bin/docker stop openwebui
+sudo /usr/bin/docker rm openwebui
 
 # Update the database with the admin user
 cat << EOF > /etc/open-webui.d/webui.sql
