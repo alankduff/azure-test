@@ -93,7 +93,7 @@ resource "azurerm_linux_virtual_machine" "openwebui" {
 
 resource "terracurl_request" "openwebui" {
   name   = "open_web_ui"
-  url    = "http://${resource.azurerm_public_ip.openwebui.ip_address}
+  url    = "http://${resource.azurerm_public_ip.openwebui.ip_address}"
   method = "GET"
 
   response_codes = [200]
