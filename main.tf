@@ -46,7 +46,7 @@ variable "machine" {
   description = "The machine type and image to use for the VM"
   # GPU instance with 24GB of memory and 4 vCPUs with 16GB of system RAM
   default = {
-    "gpu" : { "type" : "Standard_NC4as_T4_v3" },
+    "gpu" : { "type" : "Standard_D2s_v3" },
     "cpu" : { "type" : "Standard_A2_v2" },
   }
 }
