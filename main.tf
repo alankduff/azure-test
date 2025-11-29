@@ -39,6 +39,6 @@ variable "openai_base" {
 
 variable "openai_key" {
   description = "Optional API key to use OpenAI API with Open Web UI"
-  default     = ""
+  default     = $TF_VAR_openai_key
 }
 

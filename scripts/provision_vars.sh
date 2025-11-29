@@ -69,6 +69,8 @@ rm -f /etc/open-webui.d/webui.sql
 #echo "OPENAI_BASE='-e OPENAI_API_BASE_URLS=${openai_base}'" >> /etc/open-webui.d/openwebui.env
 #%{ endif }
 
+# OPENAI_KEY="-e OPENAI_API_KEY=${openai_key}"
+
 cat <<EOF > /etc/open-webui.d/openwebui.env
 OPENAI_KEY="-e OPENAI_API_KEY=${openai_key}"
 OPENAI_BASE="-e OPENAI_API_BASE_URLS=${openai_base}"
