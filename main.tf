@@ -39,6 +39,6 @@ variable "openai_base" {
 
 variable "openai_key" {
   description = "Optional API key to use OpenAI API with Open Web UI"
-  default     = ""${var.openai_key}"
+  default     = ""
 }
 
