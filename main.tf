@@ -42,3 +42,16 @@ variable "openai_key" {
   type=string
 }
 
+variable "machine" {
+  description = "The machine type and image to use for the VM"
+  # GPU instance with 24GB of memory and 4 vCPUs with 16GB of system RAM
+  default = {
+    "gpu" : { "type" : "Standard_NC4as_T4_v3" },
+    "cpu" : { "type" : "Standard_A2_v2" },
+  }
+}
+
+variable "gpu_enabled" {
+  description = "Is the VM GPU enabled"
+  default     = false
+}

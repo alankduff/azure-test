@@ -24,7 +24,8 @@ data "cloudinit_config" "config" {
       open_webui_user     = var.open_webui_user,
       open_webui_password = random_password.password.result,
       openai_base         = var.openai_base,
-      openai_key          = var.openai_key
+      openai_key          = var.openai_key,
+      gpu_enabled         = var.gpu_enabled
     })
   }
 
@@ -78,7 +79,8 @@ resource "azurerm_linux_virtual_machine" "openwebui" {
   name                = "example-machine"
   resource_group_name = azurerm_resource_group.openwebui.name
   location            = azurerm_resource_group.openwebui.location
-  size                = "Standard_A2_v2"
+  #size                = "Standard_A2_v2"
+  size                = var.gpu_enabled ? var.machine.gpu.type : var.machine.cpu.type
   admin_username      = "openwebui"
   network_interface_ids = [azurerm_network_interface.openwebui.id,]
 
@@ -104,6 +106,11 @@ resource "azurerm_linux_virtual_machine" "openwebui" {
 }
 
 resource "terracurl_request" "openwebui" {
+
+  lifecycle {
+    replace_triggered_by = [ azurerm_linux_virtual_machine.openwebui ]
+  }
+  
   name   = "open_web_ui"
   url    = "http://${resource.azurerm_public_ip.openwebui.ip_address}"
   method = "GET"

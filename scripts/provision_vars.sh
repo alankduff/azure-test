@@ -76,6 +76,30 @@ OPENAI_KEY="-e OPENAI_API_KEY=${openai_key}"
 OPENAI_BASE="-e OPENAI_API_BASE_URLS=${openai_base}"
 EOF
 
+# If the GPU is enabled, then we need to install the Nvidia drivers and the
+# Nvidia Container Toolkit
+%{ if gpu_enabled }
+echo "GPU_FLAG='--gpus=all'" >> /etc/open-webui.d/openwebui.env
+
+# Install Nvidia Driver
+echo 'deb http://deb.debian.org/debian/ sid main contrib non-free non-free-firmware' >> /etc/apt/sources.list
+apt-get update
+apt-get install -y linux-headers-amd64
+apt-get install -y nvidia-driver firmware-misc-nonfree
+
+## Install Nvidia Container Toolkit
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+apt-get update
+apt-get install -y nvidia-container-toolkit
+
+## Configure Docker
+nvidia-ctk runtime configure --runtime=docker
+%{ endif }
+
 
 ## Create the systemd unit
 ## When starting systemd will load the environment file and pass the variables to the container
@@ -93,7 +117,7 @@ EnvironmentFile=/etc/open-webui.d/openwebui.env
 
 ExecStartPre=-/usr/bin/docker stop openwebui
 ExecStartPre=-/usr/bin/docker rm openwebui
-ExecStart=/usr/bin/docker run -p 80:8080 $OPENAI_KEY $OPENAI_BASE \
+ExecStart=/usr/bin/docker run -p 80:8080 $GPU_FLAG $OPENAI_KEY $OPENAI_BASE \
     -e RAG_EMBEDDING_MODEL_AUTO_UPDATE=true \
     -v /etc/open-webui.d:/root/.open_web_ui \
     -v /etc/open-webui.d:/app/backend/data \
@@ -109,4 +133,4 @@ EOF
 systemctl daemon-reload
 systemctl enable openwebui.service
 
-systemctl start openwebui.service
+reboot
